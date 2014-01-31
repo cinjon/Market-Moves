@@ -51,3 +51,11 @@ class Record(db.Model):
         self.eps = eps
         self.fifty_day_avg = fifty_day_avg
         self.twohund_day_avg = twohund_day_avg
+
+def create_record(timestamp, volume, exchange, price, market_cap, short_ratio,
+                  ps, pe, eps, fifty_day_avg, twohund_day_avg):
+    record = Record(timestamp, volume, exchange, price, market_cap, short_ratio,
+                    ps, pe, eps, fifty_day_avg, twohund_day_avg)
+    app.utility.add(record)
+    return record
+
