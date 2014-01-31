@@ -19,6 +19,11 @@ class Equity(db.Model):
 def equities_from_exchange(exchange):
     return Equity.query.filter_by(exchange=exchange).all()
 
+def create_equity(ticker, name, exchange, sector, industry):
+    equity = Equity(ticker, name, exchange, sector, industry)
+    app.utility.add(equity)
+    return equity
+
 class Record(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime)

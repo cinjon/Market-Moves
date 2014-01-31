@@ -8,6 +8,7 @@ db = SQLAlchemy(flask_app)
 
 import views
 import models
+import utility
 
 @flask_app.before_first_request
 def before_first_request():

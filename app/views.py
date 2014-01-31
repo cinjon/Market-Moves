@@ -15,14 +15,14 @@ def equity_halves(equities):
 
 @app.flask_app.route('/nyse', methods=['GET'])
 def nyse():
-    equities = app.models.equities_from_exchange('nyse')
+    equities = app.models.equities_from_exchange('NYSE')
     first_half, second_half = equity_halves(equities)
     return render_template('exchange.html', exchange="NYSE",
                            first_half=first_half, second_half=second_half)
 
 @app.flask_app.route('/nasdaq', methods=['GET'])
 def nasdaq():
-    equities = app.models.equities_from_exchange('nasdaq')
+    equities = app.models.equities_from_exchange('NASDAQ')
     first_half, second_half = equity_halves(equities)
     return render_template('exchange.html', exchange="NASDAQ",
                            first_half=first_half, second_half=second_half)
