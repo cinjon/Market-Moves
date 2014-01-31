@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+<style>
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <h4>{{exchange}}</h4>
+  <hr class="style-two">
+  {% if first_half %}
+  <div class="span5">
+    {% set equities=first_half %}
+    {% include 'equity_list.html' %}
+  </div>
+  {% endif %}
+
+  {% if second_half %}
+  <div class="span5 offset1">
+    {% set equities=second_half %}
+    {% include 'equity_list.html' %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block footer %}
+{{ super() }}
+{% endblock %}

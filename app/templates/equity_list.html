@@ -1,0 +1,14 @@
+<div class="row-fluid">
+  <div class="span2">Ticker</div>
+  <div class="span4">Name</div>
+  <div class="span3">Sector</div>
+  <div class="span3">Industry</div>
+</div>
+{% for equity in equities %}
+<div class="row-fluid">
+  <div class="span2">{{equity.ticker}}</div>
+  <div class="span4">{{equity.name}}</div>
+  <div class="span3">{{equity.sector}}</div>
+  <div class="span3">{{equity.industry}}</div>
+</div>
+{% endfor %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+<style>
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row-fluid">
+    <h4>Exchanges:</h4>
+  </div>
+  <div class="row-fluid">
+    <a href="{{url_for('nyse')}}">NYSE</a>
+  </div>
+  <div class="row-fluid">
+    <a href="{{url_for('nasdaq')}}">Nasdaq</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+{{ super() }}
+<script src="/static/js/home.js"></script>
+{% endblock %}
