@@ -2,15 +2,14 @@ import app
 import ystockquote
 import math
 
+dollar_types = {'B':9, 'M':6, 'T':12, 'K':3}
 def expand_amount_string(amt_str):
-    dollar_type = amt_str[-1]
-    if dollar_type == 'B':
-        return int(float(amt_str[:-1]) * math.pow(10,9))
-    elif dollar_type == 'M':
-        return int(float(amt_str[:-1]) * math.pow(10,6))
-    else:
+    dollar = amt_str[-1]
+    if dollar not in dollar_types:
         print 'Unknown dollar_type %s' % amt_str
         return None
+    else:
+        return int(float(amt_str[:-1]) * math.pow(10, dollar_types[dollar]))
 
 def cleanse_data(data):
     ret = {}
