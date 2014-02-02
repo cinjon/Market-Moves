@@ -9,7 +9,7 @@ def expand_amount_string(amt_str):
     elif dollar_type == 'M':
         return int(float(amt_str[:-1]) * math.pow(10,6))
     else:
-        print 'Unknown dollar_type'
+        print 'Unknown dollar_type %s' % amt_str
         return None
 
 def cleanse_data(data):
@@ -28,30 +28,43 @@ def cleanse_data(data):
             ret[key] = expand_amount_string(value)
     return ret
 
-@app.sched.cron_schedule(day_of_week='mon-fri', hour='15,18,21')
-def update_records():
-    time = app.utility.get_time()
+def _update_record(equity, time):
+    data = ystockquote.get_all(equity.ticker)
+    if data['price'] == 'N/A':
+        print 'Price is NA. Killing'
+        return None
+
+    data = cleanse_data(data)
+    record = app.models.create_record(
+        time, data['volume'], data['stock_exchange'],
+        data['price'], data['market_cap'], data['short_ratio'],
+        data['price_sales_ratio'], data['price_earnings_ratio'],
+        data['earnings_per_share'], data['fifty_day_moving_avg'],
+        data['two_hundred_day_moving_avg'], equity.id)
+    return data
+
+def _update_records(exchange, time):
+    print 'Starting Exchange %s' % exchange
     count = 0
     fail = 0
-    for equity in app.models.equities_from_exchange('NYSE'):
+    for equity in app.models.equities_from_exchange(exchange):
         try:
-            print 'Working Equity %s' % equity.ticker
-            data = ystockquote.get_all(equity.ticker)
-            if data['price'] == 'N/A':
-                print 'Price is NA. Killing'
+            data = _update_record(equity, time)
+            if not data:
                 continue
-
-            data = cleanse_data(data)
-            record = app.models.create_record(
-                time, data['volume'], data['stock_exchange'],
-                data['price'], data['market_cap'], data['short_ratio'],
-                data['price_sales_ratio'], data['price_earnings_ratio'],
-                data['earnings_per_share'], data['fifty_day_moving_avg'],
-                data['two_hundred_day_moving_avg'])
             count += 1
-            app.utility.commit()
         except Exception, e:
             print 'FAIL: %s, %s' % (equity.ticker, data)
             fail += 1
+        finally:
+            app.utility.commit()
     print 'Completed: %d, Failed: %d' % (count, fail)
+
+@app.sched.cron_schedule(day_of_week='mon-fri', hour='15,18,21')
+def update_records():
+    time = app.utility.get_time()
+    print 'Starting update at time %s' % time
+    _update_records('NYSE', time)
+    _update_records('NASDAQ', time)
+    print 'Finished updating at time %s' % app.utility.get_time()
 
