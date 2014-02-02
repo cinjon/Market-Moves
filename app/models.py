@@ -26,11 +26,12 @@ def create_equity(ticker, name, exchange, sector, industry):
 
 class Record(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    equity_id = app.db.Column(app.db.Integer, app.db.ForeignKey('equity.id'), index=True)
     timestamp = db.Column(db.DateTime)
     volume = db.Column(db.Integer)
     exchange = db.Column(db.String(30))
     price = db.Column(db.Float)
-    market_cap = db.Column(db.Integer)
+    market_cap = db.Column(db.BigInteger)
     short_ratio = db.Column(db.Float)
     ps = db.Column(db.Float)
     pe = db.Column(db.Float)
@@ -39,8 +40,10 @@ class Record(db.Model):
     twohund_day_avg = db.Column(db.Float)
 
     def __init__(self, timestamp, volume, exchange, price, market_cap,
-                 short_ratio, ps, pe, eps, fifty_day_avg, twohund_day_avg):
+                 short_ratio, ps, pe, eps, fifty_day_avg, twohund_day_avg,
+                 equity_id):
         self.timestamp = timestamp or app.utility.get_time()
+        self.equity_id = equity_id
         self.volume = volume
         self.exchange = exchange
         self.price = price
@@ -53,9 +56,9 @@ class Record(db.Model):
         self.twohund_day_avg = twohund_day_avg
 
 def create_record(timestamp, volume, exchange, price, market_cap, short_ratio,
-                  ps, pe, eps, fifty_day_avg, twohund_day_avg):
+                  ps, pe, eps, fifty_day_avg, twohund_day_avg, equity_id):
     record = Record(timestamp, volume, exchange, price, market_cap, short_ratio,
-                    ps, pe, eps, fifty_day_avg, twohund_day_avg)
+                    ps, pe, eps, fifty_day_avg, twohund_day_avg, equity_id)
     app.utility.add(record)
     return record
 
