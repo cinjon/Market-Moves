@@ -1,6 +1,9 @@
 import app
+from apscheduler.scheduler import Scheduler
 import ystockquote
 import math
+
+sched = Scheduler()
 
 dollar_types = {'B':9, 'M':6, 'T':12, 'K':3}
 def expand_amount_string(amt_str):
@@ -59,7 +62,7 @@ def _update_records(exchange, time):
             app.utility.commit()
     print 'Completed: %d, Failed: %d' % (count, fail)
 
-@app.sched.cron_schedule(day_of_week='mon-fri', hour='15,18,21')
+@sched.cron_schedule(day_of_week='mon-fri', hour='15,18,21')
 def update_records():
     time = app.utility.get_time()
     print 'Starting update at time %s' % time
@@ -67,3 +70,4 @@ def update_records():
     _update_records('NASDAQ', time)
     print 'Finished updating at time %s' % app.utility.get_time()
 
+sched.start()

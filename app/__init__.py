@@ -1,17 +1,14 @@
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
-from apscheduler.scheduler import Scheduler
 
 flask_app = Flask(__name__)
 flask_app.config.from_object('config')
 flask_app.debug = True
 db = SQLAlchemy(flask_app)
-sched = Scheduler()
 
 import views
 import models
 import utility
-import cron
 
 @flask_app.before_first_request
 def before_first_request():
