@@ -70,7 +70,5 @@ def update_records():
     _update_records('NASDAQ', time)
     print 'Finished updating at time %s' % app.utility.get_time()
 
-sched.start()
+# sched.start()
 
-while true:
-    pass
