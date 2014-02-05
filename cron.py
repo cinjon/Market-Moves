@@ -71,3 +71,6 @@ def update_records():
     print 'Finished updating at time %s' % app.utility.get_time()
 
 sched.start()
+
+while true:
+    pass
