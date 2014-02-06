@@ -57,6 +57,7 @@ def _update_records(exchange, time):
             count += 1
         except Exception, e:
             print 'FAIL: %s, %s' % (equity.ticker, data)
+            print e
             fail += 1
         finally:
             app.utility.commit()
